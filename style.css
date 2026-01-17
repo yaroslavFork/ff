@@ -1,0 +1,89 @@
+/* ВАШ БАЗОВЫЙ СТИЛЬ */
+body {
+  background: #050a10;
+  color: white;
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  margin: 0;
+}
+.app-container {
+  width: 100%;
+  max-width: 400px;
+  z-index: 1;
+}
+.card {
+  background: #101825;
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+input {
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  background: #000;
+  color: white;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 10;
+}
+button {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0;
+  border-radius: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+  transition: 0.3s;
+}
+button:active {
+  transform: scale(0.98);
+}
+.hidden {
+  display: none !important;
+}
+
+/* КНОПКА ПРЕЗИДЕНТА */
+#admin-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: gold;
+  color: black;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  z-index: 999;
+  display: none;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.balance-box {
+  font-size: 32px;
+  color: #00ffcc;
+  margin: 15px 0;
+}
+
+/* НОВЫЕ СТИЛИ ДЛЯ АНИМИРОВАННОГО МЕНЮ ПРЕЗИДЕНТА */
+@keyframes slideUp {
+  from { opacity: 0; transform: translate(-50%, -40%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+#overlay {
+  display: none;

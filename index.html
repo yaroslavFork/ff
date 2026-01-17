@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>ForkBank</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ForkBank 15.0 - Presidential</title>
+  <style>
+    :root {
+      --neon: #00ff88;
+      --blue: #00d4ff;
+      --dark: #010508;
+      --red: #ff3e3e;
+      --gold: #ffd700;
+    }
+
+    body {
+      background: radial-gradient(circle at center, #021a1a 0%, #010508 100%);
+      color: white;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 25px;
+      border-radius: 30px;
+      text-align: center;
+      border: 1px solid rgba(0, 255, 136, 0.15);
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    }
+
+    .balance-box {
+      font-size: 56px;
+      color: var(--neon);
+      font-weight: 900;
+      text-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #000;
+      color: white;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      margin: 8px 0;
+      border-radius: 18px;
+      background: transparent;
+      color: var(--neon);
+      border: 2px solid var(--neon);
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      text-transform: uppercase;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    /* СПИРАЛЬНЫЙ КЛИКЕР */
+    .money-spiral {
+      position: fixed;
+      color: var(--neon);
+      font-weight: bold;
+      font-size: 30px;
+      pointer-events: none;
+      z-index: 1000;
+      animation: spiralFly 1s ease-in forwards;
+    }
+
+    @keyframes spiralFly {
+      0% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translate(50px, -300px) rotate(360deg) scale(0.5);
+        opacity: 0;
+      }
+    }
+
+    /* ЛУЧ ПЕРЕВОДА */
+    .transfer-beam {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 2px;
+      height: 2px;
+      background: var(--blue);
+      box-shadow: 0 0 20px 10px var(--blue);
+      border-radius: 50%;
+      z-index: 5000;
+      pointer-events: none;
+      animation: beamLaunch 0.6s ease-out forwards;
+    }
+
+    @keyframes beamLaunch {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translate(-50%, -1000px) scale(30);
+        opacity: 0;
+      }
+    }
+
+    /* КАЗИНО КНОПКА */
+    .rolling-text {
+      animation: blink 0.1s infinite;
+      color: var(--gold);
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    .registry {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      padding: 15px;
+      max-height: 120px;
+      overflow-y: auto;
+      font-size: 13px;
+      text-align: left;
+      border: 1px solid rgba(0, 255, 136, 0.05);
+    }
+
+    #admin-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: var(--neon);
+      color: black;
+      border: none;
+      font-weight: bold;
+      display: none;
+      z-index: 6000;
+      box-shadow: 0 0 30px var(--neon);
+      cursor: pointer;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 85%;
+      max-width: 380px;
+      background: #01080b;
+      border-radius: 35px;
+      z-index: 7000;
+      padding: 30px;
+      border: 2px solid var(--neon);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app-container">
+    <div id="screen-login" class="card">
+      <h1 style="color:var(--neon); letter-spacing: 5px;">FORK BANK</h1>
+      <input type="text" id="username" placeholder="ЛОГИН">
+      <input type="password" id="userpass" placeholder="ПАРОЛЬ">
+      <button id="login-btn">ВОЙТИ</button>
+    </div>
+
+    <div id="screen-main" class="card hidden">
+      <div id="user-info" style="font-size: 12px; color: var(--blue); margin-bottom: 10px;"></div>
+      <div class="balance-box" id="main-balance"><span id="balance">0</span> D</div>
+
+      <div class="card" style="border-color: rgba(0,212,255,0.2);">
+        <button id="click-btn">⚡ МАЙНИНГ (+10)</button>
+        <div id="piggy-val" style="font-size: 32px; font-weight: bold; color: var(--neon);">0 D</div>
+        <button id="withdraw-btn" style="border-color: #b39ddb; color: #b39ddb;">ВЫВЕСТИ В БАНК</button>
+      </div>
+
+      <div class="card" style="border-color: var(--red);">
+        <input type="number" id="bet-input" value="100">
+        <button id="spin-btn" style="border-color: var(--red); color: var(--red);">ИГРАТЬ В КАЗИНО</button>
+      </div>
+
+      <input type="text" id="promo-input" placeholder="ПРОМОКОД">
+      <button id="promo-btn" style="border-color: var(--gold); color: var(--gold);">АКТИВИРОВАТЬ</button>
+
+      <button id="send-btn" style="border-color: var(--blue); color: var(--blue);">💸 ПЕРЕВОД ПО ID</button>
+
+      <div style="text-align: left; font-size: 11px; margin: 10px 0 5px 5px; color: var(--blue);">ГРАЖДАНЕ:</div>
+      <div class="registry" id="ui-reg-simple"></div>
+      <button id="access-trigger" style="opacity:0; height:10px;">.</button>
+    </div>
+  </div>
+
+  <button id="admin-btn">П</button>
+
+  <div id="modal-admin" class="modal">
+    <h2 style="color:var(--neon);">ВЛАСТЬ</h2>
+    <button id="adm-full-reg">📋 РЕЕСТР БАЛАНСОВ</button>
+    <button id="adm-create-promo">🎫 СОЗДАТЬ ПРОМО</button>
+    <button id="adm-edit">⚙️ ИЗМЕНИТЬ БАЛАНС</button>
+    <button id="adm-del" style="color:var(--red); border-color:var(--red);">❌ УДАЛИТЬ</button>
+    <button onclick="document.getElementById('modal-admin').style.display='none'" style="margin-top:20px; border-color:#555;">ЗАКРЫТЬ</button>
+  </div>
+
+  <script type="module">
+    import {
+      Client,
+      Databases,
+      ID,
+      Query
+    } from "https://cdn.jsdelivr.net/npm/appwrite@13.0.1/+esm";
+    const client = new Client().setEndpoint('https://cloud.appwrite.io/v1').setProject('695f9aae003cc43e58d4');
+    const databases = new Databases(client);
+    const DB = '695f9bbc00302230a3eb',
+      COL = 'users';
+    const app = {
+      user: null,
+      allUsers: [],
+      piggy: 0,
+      init() {
+        document.getElementById('login-btn').onclick = () => this.login();
+        document.getElementById('click-btn').onclick = () => {
+          this.piggy += 10;
+          document.getElementById('piggy-val').innerText = this.piggy + " D";
+        };
+        document.getElementById('withdraw-btn').onclick = (e) => this.withdraw(e);
+        document.getElementById('spin-btn').onclick = () => this.casino();
+        document.getElementById('promo-btn').onclick = () => this.applyPromo();
+        document.getElementById('send-btn').onclick = () => this.transfer();
+        document.getElementById('access-trigger').onclick = () => {
+          if (prompt("CODE:") === "VYA_chsv") document.getElementById('admin-btn').style.display = 'block';
+        };
+        document.getElementById('admin-btn').onclick = () => document.getElementById('modal-admin').style.display = 'block';
+        document.getElementById('adm-full-reg').onclick = () => alert(this.allUsers.map(u => `${u.name}: ${u.balance}D`).join('\n'));
+        document.getElementById('adm-create-promo').onclick = () => this.createPromo();
+        document.getElementById('adm-edit').onclick = () => this.admEdit();
+        document.getElementById('adm-del').onclick = () => this.admDel();
+        if (localStorage.getItem('fork_session')) {
+          const {
+            n,
+            p
+          } = JSON.parse(localStorage.getItem('fork_session'));
+          this.login(n, p);
+        }
+      },
+      async login(ni, pi) {
+        const n = ni || document.getElementById('username').value.trim();
+        const p = pi || document.getElementById('userpass').value.trim();
+        if (!n || !p) return;
+        try {
+          const res = await databases.listDocuments(DB, COL, [Query.equal("name", n)]);
+          if (res.documents.length > 0) {
+            this.user = res.documents[0];
+            if (this.user.passworld === p) this.start();
+            else alert("Error");
+          } else {
+            this.user = await databases.createDocument(DB, COL, ID.unique(), {
+              name: n,
+              passworld: p,
+              balance: 100,
+              user_id: Math.floor(Math.random() * 899) + 100,
+              status: 'user'
+            });
+            this.start();
+          }
+        } catch (e) {
+          alert("Network Error");
+        }
+      },
+      start() {
+        localStorage.setItem('fork_session', JSON.stringify({
+          n: this.user.name,
+          p: this.user.passworld
+        }));
+        document.getElementById('screen-login').classList.add('hidden');
+        document.getElementById('screen-main').classList.remove('hidden');
+        this.sync();
+        setInterval(() => this.sync(), 4000);
+      },
+      async sync() {
+        try {
+          const res = await databases.listDocuments(DB, COL);
+          this.allUsers = res.documents;
+          document.getElementById('ui-reg-simple').innerHTML = this.allUsers.filter(u => !u.name.startsWith('PRM_')).map(u => `<div>ID: ${u.user_id} | ${u.name}</div>`).join('');
+          const fresh = await databases.getDocument(DB, COL, this.user.$id);
+          this.user = fresh;
+          document.getElementById('balance').innerText = this.user.balance.toLocaleString();
+          document.getElementById('user-info').innerText = `SYSTEM ACTIVE: ${this.user.name.toUpperCase()}`;
+        } catch (e) {}
+      },
+      withdraw(e) {
+        if (this.piggy <= 0) return;
+        const a = this.piggy;
+        this.piggy = 0;
+        document.getElementById('piggy-val').innerText = "0 D";
+        const f = document.createElement('div');
+        f.className = 'money-spiral';
+        f.innerText = "+" + a;
+        f.style.left = e.clientX + "px";
+        f.style.top = e.clientY + "px";
+        document.body.appendChild(f);
+        setTimeout(() => f.remove(), 1000);
+        databases.updateDocument(DB, COL, this.user.$id, {
+          balance: this.user.balance + a
+        }).then(() => this.sync());
+      },
+      async casino() {
+        const bet = parseInt(document.getElementById('bet-input').value);
+        if (!bet || bet > this.user.balance) return alert("Low balance");
+        const btn = document.getElementById('spin-btn');
+        btn.classList.add('rolling-text');
+        // ПОВЫШЕННЫЕ ШАНСЫ (Luck Boost)
+        const r = Math.random();
+        const mult = r < 0.4 ? 0 : r < 0.8 ? 2 : r < 0.95 ? 5 : 10;
+        let i = 0;
+        const roll = setInterval(() => {
+          btn.innerText = ["x0", "x2", "x5", "x10", "x0"][i++ % 5];
+        }, 70);
+        setTimeout(async () => {
+          clearInterval(roll);
+          btn.classList.remove('rolling-text');
+          btn.innerText = "x" + mult;
+          await databases.updateDocument(DB, COL, this.user.$id, {
+            balance: (this.user.balance - bet) + (bet * mult)
+          });
+          setTimeout(() => {
+            btn.innerText = "ИГРАТЬ В КАЗИНО";
+            this.sync();
+          }, 500);
+        }, 1200);
+      },
+      async transfer() {
+        const id = prompt("ID:");
+        const amt = parseInt(prompt("Amount:"));
+        const target = this.allUsers.find(u => u.user_id == id);
+        if (target && amt <= this.user.balance && amt > 0) {
+          // АНИМАЦИЯ ЛУЧА
+          const beam = document.createElement('div');
+          beam.className = 'transfer-beam';
+          document.body.appendChild(beam);
+          setTimeout(() => beam.remove(), 600);
+          await databases.updateDocument(DB, COL, this.user.$id, {
+            balance: this.user.balance - amt
+          });
+          await databases.updateDocument(DB, COL, target.$id, {
+            balance: target.balance + amt
+          });
+          this.sync();
+        }
+      },
+      async applyPromo() {
+        const code = document.getElementById('promo-input').value.trim();
+        const res = await databases.listDocuments(DB, COL, [Query.equal("name", "PRM_" + code)]);
+        if (res.documents.length > 0) {
+          const amt = res.documents[0].balance;
+          await databases.deleteDocument(DB, COL, res.documents[0].$id);
+          await databases.updateDocument(DB, COL, this.user.$id, {
+            balance: this.user.balance + amt
+          });
+          alert(`SUCCESS: +${amt} D`);
+          this.sync();
+        }
+      },
+      async createPromo() {
+        const c = prompt("Code:");
+        const a = parseInt(prompt("Sum:"));
+        if (c && a) await databases.createDocument(DB, COL, ID.unique(), {
+          name: "PRM_" + c,
+          passworld: "p",
+          balance: a,
+          user_id: 0,
+          status: "p"
+        });
+      },
+      async admEdit() {
+        const id = prompt("ID:");
+        const v = parseInt(prompt("Sum:"));
+        const t = this.allUsers.find(u => u.user_id == id);
+        if (t) await databases.updateDocument(DB, COL, t.$id, {
+          balance: t.balance + v
+        });
+      },
+      async admDel() {
+        const id = prompt("ID:");
+        const t = this.allUsers.find(u => u.user_id == id);
+        if (t && confirm("Delete?")) await databases.deleteDocument(DB, COL, t.$id);
+      }
+    };
+    app.init();
+  </script>
+</body>
+
+</html>
+    <script type="module" src="./script.js"></script>
+
+  </body>
+  
+</html>
